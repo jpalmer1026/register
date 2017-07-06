@@ -23,3 +23,7 @@
 /subprojects/*/out
 /.teamcity/*.iml
 /.teamcity/target
+
+#Misc
+#----
+.DS_Store
