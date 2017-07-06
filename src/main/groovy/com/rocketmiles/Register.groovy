@@ -69,14 +69,17 @@ class Register {
     /**
      * Withdraw a specific amount from the register
      *
-     * @param amount the amount to withdraw from the register
+     * @param amountRequested the amount to withdraw from the register
      *
      * @return current state in total and each denomination if there are sufficient funds and exact change can be made,
      *         sorry otherwise
      */
-    String change(int amount) {
-        if (hasSufficientFunds(amount)) {
-            if (withdrawAmount(amount)) {
+    String change(int amountRequested) {
+        if (hasSufficientFunds(amountRequested)) {
+            if (amountRequested == 0) {
+                return this.toString()
+            }
+            if (withdrawAmount(amountRequested)) {
                 return this.toString()
             }
         }
@@ -99,7 +102,7 @@ class Register {
                 moneyList << denomination.dollarValue
             }
         }
-        canChangeBeMadeForAmount(moneyList, amountRequested)
+        makeChangeForAmountRequested(moneyList, amountRequested)
     }
 
     private int getDenominationCount(Denomination denomination) {
@@ -124,7 +127,11 @@ class Register {
         denominationCount
     }
 
-    private boolean canChangeBeMadeForAmount(List<Integer> billDenominationList, int amountRequested, List<Integer> partial = []) {
+    /*
+        Decrements the appropriate denominations for the amount requested, if change can be made, and returns true.
+        If change can't be made for the amount requested, false is returned and the denominations remain unchanged.
+     */
+    private boolean makeChangeForAmountRequested(List<Integer> billDenominationList, int amountRequested, List<Integer> partial = []) {
         int s = 0
         if (partial) {
             s = partial.sum()
@@ -138,7 +145,7 @@ class Register {
         }
 
         if (s > amountRequested) {
-            return
+            return false
         }
 
         for (i in 0..<billDenominationList.size()) {
@@ -149,10 +156,12 @@ class Register {
             }
             List<Integer> partialList = [] + partial
             partialList << n
-            if (canChangeBeMadeForAmount(remaining, amountRequested, partialList)) {
+            if (makeChangeForAmountRequested(remaining, amountRequested, partialList)) {
                 return true
             }
         }
+
+        false
     }
 
     private void decrementBills(int it) {

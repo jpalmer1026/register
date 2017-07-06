@@ -48,7 +48,7 @@ class RegisterTest extends Specification {
 
     @Unroll
     void "change method returns expected amount when \$#amount is requested"() {
-        given: 'a register with a predefined amount of bills'
+        given: 'a register with $43 in a predefined amount of bills'
         Register register = new Register(1, 0, 3, 4, 0)
 
         when: 'change is called with an amount configured by the test'
@@ -59,6 +59,7 @@ class RegisterTest extends Specification {
 
         where:
         amount || expectedResult
+        0      || '$43 1 0 3 4 0'
         1      || 'sorry'
         2      || '$41 1 0 3 3 0'
         3      || 'sorry'
