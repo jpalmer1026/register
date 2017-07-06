@@ -99,7 +99,7 @@ class Register {
                 moneyList << denomination.dollarValue
             }
         }
-        subsetSub(moneyList, amountRequested)
+        canChangeBeMadeForAmount(moneyList, amountRequested)
     }
 
     private int getDenominationCount(Denomination denomination) {
@@ -124,32 +124,32 @@ class Register {
         denominationCount
     }
 
-    private boolean subsetSub(List<Integer> numbers, int target, List<Integer> partial = []) {
+    private boolean canChangeBeMadeForAmount(List<Integer> billDenominationList, int amountRequested, List<Integer> partial = []) {
         int s = 0
         if (partial) {
             s = partial.sum()
         }
 
-        if (s == target) {
+        if (s == amountRequested) {
             partial.each {
                 decrementBills(it)
             }
             return true
         }
 
-        if (s > target) {
+        if (s > amountRequested) {
             return
         }
 
-        for (i in 0..<numbers.size()) {
+        for (i in 0..<billDenominationList.size()) {
             List<Integer> remaining = []
-            int n = numbers[i]
-            (i + 1..<numbers.size()).each { j ->
-                remaining << numbers[j]
+            int n = billDenominationList[i]
+            (i + 1..<billDenominationList.size()).each { j ->
+                remaining << billDenominationList[j]
             }
             List<Integer> partialList = [] + partial
             partialList << n
-            if (subsetSub(remaining, target, partialList)) {
+            if (canChangeBeMadeForAmount(remaining, amountRequested, partialList)) {
                 return true
             }
         }
