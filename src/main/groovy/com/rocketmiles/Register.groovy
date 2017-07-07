@@ -58,12 +58,24 @@ class Register {
      * @return current state in total and each denomination
      */
     String take(int twenties, int tens, int fives, int twos, int ones) {
-        this.twenties -= twenties
-        this.tens -= tens
-        this.fives -= fives
-        this.twos -= twos
-        this.ones -= ones
-        this.toString()
+        if (hasSufficientDenominations(twenties, tens, fives, twos, ones)) {
+            this.twenties -= twenties
+            this.tens -= tens
+            this.fives -= fives
+            this.twos -= twos
+            this.ones -= ones
+            return this.toString()
+        }
+
+        return 'sorry'
+    }
+
+    private boolean hasSufficientDenominations(int twenties, int tens, int fives, int twos, int ones) {
+        twenties <= getDenominationCount(Denomination.TWENTY) &&
+        tens <= getDenominationCount(Denomination.TEN) &&
+        fives <= getDenominationCount(Denomination.FIVE) &&
+        twos <= getDenominationCount(Denomination.TWO) &&
+        ones <= getDenominationCount(Denomination.ONE)
     }
 
     /**

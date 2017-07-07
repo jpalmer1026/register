@@ -25,11 +25,23 @@ class RegisterTest extends Specification {
         given: 'a register with $128 in a predefined amount of bills'
         Register register = new Register(2, 4, 6, 4, 10)
 
-        expect: 'take should return the expected results after taking specific denominations from the register'
-        register.take(1, 4, 3, 0, 10) == '$43 1 0 3 4 0'
+        when: 'take is invoked with quantities of each denomination that the register contains'
+        register.take(1, 4, 3, 0, 10)
+
+        then: 'the expected number of each denomination have been taken from the register and the total is accurate'
+        register.toString() == '$43 1 0 3 4 0'
+
+        when: 'take is invoked with quantities of each denomination that is greater than the register contains'
+        String result = register.take(2, 4, 3, 0, 10)
+
+        then: 'an error is returned'
+        result == 'sorry'
+
+        and: 'no denominations have been taken from the register'
+        register.toString() == '$43 1 0 3 4 0'
     }
 
-    void "no bills are withdrawn from register when more money than the registewr contains is requested or exact change can't be given"() {
+    void "no bills are withdrawn from register when more money than the register contains is requested or exact change can't be given"() {
         given: 'a register with $43 in a predefined amount of bills'
         Register register = new Register(1, 0, 3, 4, 0)
 
