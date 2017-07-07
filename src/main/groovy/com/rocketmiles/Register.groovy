@@ -8,12 +8,49 @@ class Register {
     int twos
     int ones
 
-    Register(int twenties, int tens, int fives, int twos, int ones) {
-        this.twenties = twenties
-        this.tens = tens
-        this.fives = fives
-        this.twos = twos
-        this.ones = ones
+    static class Builder {
+        private int twenties = 0
+        private int tens     = 0
+        private int fives    = 0
+        private int twos     = 0
+        private int ones     = 0
+
+        Builder twenties(int val) {
+            twenties = val
+            return this
+        }
+
+        Builder tens(int val) {
+            tens = val
+            return this
+        }
+
+        Builder fives(int val) {
+            fives = val
+            return this
+        }
+
+        Builder twos(int val) {
+            twos = val
+            return this
+        }
+
+        Builder ones(int val) {
+            ones = val
+            return this
+        }
+
+        Register build() {
+            new Register(this)
+        }
+    }
+
+    Register(Builder builder) {
+        twenties = builder.twenties
+        tens = builder.tens
+        fives = builder.fives
+        twos = builder.twos
+        ones = builder.ones
     }
 
     /**

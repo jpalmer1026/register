@@ -7,7 +7,7 @@ class RegisterTest extends Specification {
 
     void "show exhibits correct behavior"() {
         given: 'a register with $68 in a predefined amount of bills'
-        Register register = new Register(1, 2, 3, 4, 5)
+        Register register = new Register.Builder().twenties(1).tens(2).fives(3).twos(4).ones(5).build()
 
         expect: 'show returns the expected total and amount of each denomination correctly'
         register.show() == '$68 1 2 3 4 5'
@@ -15,7 +15,7 @@ class RegisterTest extends Specification {
 
     void "put exhibits correct behavior"() {
         given: 'a register with $68 in a predefined amount of bills'
-        Register register = new Register(1, 2, 3, 4, 5)
+        Register register = new Register.Builder().twenties(1).tens(2).fives(3).twos(4).ones(5).build()
 
         expect: 'put should return the expected results after putting specific denominations into the register'
         register.put(1, 2, 3, 0, 5) == '$128 2 4 6 4 10'
@@ -23,7 +23,7 @@ class RegisterTest extends Specification {
 
     void "take exhibits correct behavior"() {
         given: 'a register with $128 in a predefined amount of bills'
-        Register register = new Register(2, 4, 6, 4, 10)
+        Register register = new Register.Builder().twenties(2).tens(4).fives(6).twos(4).ones(10).build()
 
         when: 'take is invoked with quantities of each denomination that the register contains'
         register.take(1, 4, 3, 0, 10)
@@ -43,7 +43,7 @@ class RegisterTest extends Specification {
 
     void "no bills are withdrawn from register when more money than the register contains is requested or exact change can't be given"() {
         given: 'a register with $43 in a predefined amount of bills'
-        Register register = new Register(1, 0, 3, 4, 0)
+        Register register = new Register.Builder().twenties(1).fives(3).twos(4).build()
 
         when: 'more money is requested then the register contains'
         register.change(44)
@@ -61,7 +61,7 @@ class RegisterTest extends Specification {
     @Unroll
     void "change method returns expected amount when \$#amount is requested"() {
         given: 'a register with $43 in a predefined amount of bills'
-        Register register = new Register(1, 0, 3, 4, 0)
+        Register register = new Register.Builder().twenties(1).fives(3).twos(4).build()
 
         when: 'change is called with an amount configured by the test'
         String result = register.change(amount)
