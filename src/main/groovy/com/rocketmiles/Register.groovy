@@ -147,11 +147,19 @@ class Register {
     private boolean withdrawAmount(int amountRequested) {
         List<Integer> moneyList = []
         Denomination.values().reverse().each { denomination ->
-            (0..<getDenominationCount(denomination)).each {
-                moneyList << denomination.dollarValue
+            int denominationCount = getDenominationCount(denomination)
+            if (denominationCount && denomination.dollarValue <= amountRequested) {
+                (1..Register.getMaxDenominationCountRequiredToMakeChange(denomination, denominationCount, amountRequested)).each {
+                    moneyList << denomination.dollarValue
+                }
             }
         }
         makeChangeForAmountRequested(moneyList, amountRequested)
+    }
+
+    private static int getMaxDenominationCountRequiredToMakeChange(Denomination denomination, int denominationCount, int amountRequested) {
+        int maxDenominationCountNeeded = amountRequested.intdiv(denomination.dollarValue)
+        maxDenominationCountNeeded <= denominationCount ? maxDenominationCountNeeded : denominationCount
     }
 
     private int getDenominationCount(Denomination denomination) {
